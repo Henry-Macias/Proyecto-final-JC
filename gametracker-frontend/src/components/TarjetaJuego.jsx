@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import { Link } from "react-router-dom";
 
 export default function TarjetaJuego({ juego, onEdit, onDelete }) {
   return (
@@ -8,18 +9,12 @@ export default function TarjetaJuego({ juego, onEdit, onDelete }) {
       <p>Horas jugadas: {juego.horasJugadas}</p>
       <p>⭐ {juego.puntuacion}/5</p>
 
-      <button onClick={() => onEdit(juego)}>
-        Editar
-      </button>
+      <button onClick={() => onEdit(juego)}>Editar</button>
+      <button onClick={() => onDelete(juego._id)}>Eliminar</button>
 
-      <button onClick={() => onDelete(juego._id)}>
-        Eliminar
-      </button>
+      <Link to={`/reseñas/${juego._id}`}>
+        <button>Ver reseñas</button>
+      </Link>
     </div>
   );
 }
-import { Link } from "react-router-dom";
-
-<button>
-  <Link to={`/reseñas/${juego._id}`}>Ver reseñas</Link>
-</button>

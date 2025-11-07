@@ -1,22 +1,46 @@
-import React, { useState } from "react";
-import { createReseña } from "../services/api";
+import React, { useState, useEffect } from "react";
+import { createReseña, updateReseña } from "../services/api";
 
-export default function FormularioReseña({ juegoId, actualizar }) {
-  const [texto, setTexto] = useState("");
+export default function FormularioReseña({ juegoId, reseñaSeleccionada, limpiarSeleccion, actualizar }) {
   const [autor, setAutor] = useState("");
+  const [texto, setTexto] = useState("");
+
+  useEffect(() => {
+    if (reseñaSeleccionada) {
+      setAutor(reseñaSeleccionada.autor);
+      setTexto(reseñaSeleccionada.texto);
+    }
+  }, [reseñaSeleccionada]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // ✅ EDITAR reseña existente
+    if (reseñaSeleccionada) {
+      updateReseña(reseñaSeleccionada._id, {
+        autor,
+        texto,
+      })
+        .then(() => {
+          alert("Reseña actualizada ✅");
+          limpiarSeleccion();
+          actualizar();
+        })
+        .catch(console.error);
+
+      return;
+    }
+
+    // ✅ CREAR reseña nueva
     createReseña({
       juegoId,
-      texto,
       autor,
+      texto,
     })
       .then(() => {
         alert("Reseña agregada ✅");
-        setTexto("");
         setAutor("");
+        setTexto("");
         actualizar();
       })
       .catch(console.error);
@@ -24,11 +48,11 @@ export default function FormularioReseña({ juegoId, actualizar }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h3>Agregar reseña</h3>
+      <h3>{reseñaSeleccionada ? "Editar reseña" : "Agregar reseña"}</h3>
 
       <input
         type="text"
-        placeholder="Tu nombre"
+        placeholder="Nombre"
         value={autor}
         onChange={(e) => setAutor(e.target.value)}
       />
@@ -39,7 +63,15 @@ export default function FormularioReseña({ juegoId, actualizar }) {
         onChange={(e) => setTexto(e.target.value)}
       ></textarea>
 
-      <button type="submit">Guardar reseña</button>
+      <button type="submit">
+        {reseñaSeleccionada ? "Guardar cambios" : "Guardar"}
+      </button>
+
+      {reseñaSeleccionada && (
+        <button type="button" onClick={limpiarSeleccion}>
+          Cancelar edición
+        </button>
+      )}
     </form>
   );
 }

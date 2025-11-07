@@ -1,37 +1,54 @@
 import React, { useEffect, useState } from "react";
-import { getReseñas } from "../services/api";
+import { getReseñas, deleteReseña } from "../services/api";
 
-export default function ListaReseñas({ juegoId }) {
+export default function ListaReseñas({ juegoId, onEdit }) {
   const [reseñas, setReseñas] = useState([]);
 
-  const cargarReseñas = () => {
+  const cargar = () => {
     getReseñas()
       .then((res) => {
-        // Filtrar reseñas solo del juego actual
-        const filtradas = res.data.filter(
-          (r) => r.juegoId === juegoId
-        );
+        const filtradas = res.data.filter((r) => r.juegoId === juegoId);
         setReseñas(filtradas);
       })
       .catch(console.error);
   };
 
   useEffect(() => {
-    cargarReseñas();
+    cargar();
   }, [juegoId]);
+
+  const handleDelete = (id) => {
+    if (window.confirm("¿Seguro que deseas eliminar esta reseña?")) {
+      deleteReseña(id)
+        .then(() => cargar())
+        .catch(console.error);
+    }
+  };
 
   return (
     <div>
       <h3>Reseñas</h3>
-      {reseñas.length === 0 && <p>No hay reseñas aún.</p>}
 
-      <ul>
-        {reseñas.map((r) => (
-          <li key={r._id}>
-            <b>{r.autor}:</b> {r.texto}
-          </li>
-        ))}
-      </ul>
+      {reseñas.length === 0 ? (
+        <p>No hay reseñas aún.</p>
+      ) : (
+        <ul>
+          {reseñas.map((r) => (
+            <li key={r._id}>
+              <b>{r.autor}:</b> {r.texto}
+
+              <button onClick={() => onEdit(r)}>
+                Editar
+              </button>
+
+              {/* ✅ ELIMINAR reseña */}
+              <button onClick={() => handleDelete(r._id)}>
+                Eliminar
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
