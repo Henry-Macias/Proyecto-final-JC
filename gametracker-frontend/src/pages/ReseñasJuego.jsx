@@ -1,33 +1,32 @@
 import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom";
 import ListaReseñas from "../components/ListaReseñas";
 import FormularioReseña from "../components/FormularioReseña";
 
-export default function ReseñasJuego() {
-  const { id } = useParams();
+export default function ReseñasJuego({ juego }) {
   const [reseñaSeleccionada, setReseñaSeleccionada] = useState(null);
 
   const limpiarSeleccion = () => setReseñaSeleccionada(null);
 
-  // ✅ Para refrescar la lista después de crear/editar:
-  const actualizar = () => {
-    // Esto no hace nada ahora, pero ListaReseñas recarga sola al cambiar reseñas
-  };
+  if (!juego) {
+    return (
+      <div style={{ color: "white", padding: "20px" }}>
+        <h2>Selecciona un juego para ver sus reseñas</h2>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <Link to="/">⬅ Volver</Link>
-      <h1>Reseñas del juego</h1>
+    <div style={{ color: "white" }}>
+      <h1>Reseñas de: {juego.titulo}</h1>
 
       <FormularioReseña
-        juegoId={id}
+        juegoId={juego._id}
         reseñaSeleccionada={reseñaSeleccionada}
         limpiarSeleccion={limpiarSeleccion}
-        actualizar={actualizar}
       />
 
       <ListaReseñas
-        juegoId={id}
+        juegoId={juego._id}
         onEdit={(r) => setReseñaSeleccionada(r)}
       />
     </div>

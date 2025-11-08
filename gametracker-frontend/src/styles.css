@@ -108,3 +108,52 @@ ul li {
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
+
+.tarjeta-juego {
+  transition: 0.25s;
+}
+
+.tarjeta-juego:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+.juego-img {
+  border-radius: 10px;
+  height: 150px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.btn-accion {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #2b3442;
+  color: white;
+  transition: 0.2s;
+}
+
+.btn-accion:hover {
+  background: #3b4557;
+  transform: scale(1.03);
+}
+
+.eliminar {
+  background: #b93838;
+}
+
+.eliminar:hover {
+  background: #a23030;
+}
+
+.reseñas {
+  background: #4c8bf5;
+}
+
+.reseñas:hover {
+  background: #3a73d8;
+}
